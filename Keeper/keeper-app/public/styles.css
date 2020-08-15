@@ -101,3 +101,7 @@ form.create-note button {
   cursor: pointer;
   outline: none;
 }
+
+.register-btn{
+ margin-left: 10px;
+}

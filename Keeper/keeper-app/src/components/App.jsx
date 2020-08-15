@@ -4,53 +4,77 @@ import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
 import axios from "axios";
+import Login from "./Login";
 
 function App(){
 
     const [notes, setNotes] = useState([]);
     
-    useEffect(function(){
-        
+ 
+    useEffect( () => {
+
         axios.get('/getNotes')
         .then(function (res) {
             //handle success
             setNotes(res.data);
+            console.log(res.data);
             
         })
         .catch(function (error) {
             // handle error
             console.log(error);
         });
-    });
+
+    }, []);
     
   
     function addNote(newNote){
-        // setNotes(prevNotes => {
-        //     return [...prevNotes, newNote]
-        // });
+        setNotes(prevNotes => {
+            return [...prevNotes, newNote]
+        });
 
-        var params = new URLSearchParams();
-        params.append('title', newNote.title);
-        params.append('content', newNote.content);
-        axios.post('/addNote', params);
+        try {
 
+            var params = new URLSearchParams();
+            params.append('title', newNote.title);
+            params.append('content', newNote.content);
+            axios.post('/addNote', params);
+            
+        } catch (error) {
+            console.log(error);
+        }
+
+        
         
     }
 
     function deleteNote(id){ 
-        
-        const params = new URLSearchParams();
-        params.append("_id", id)
-        axios.post("/deleteNote", params)
 
-        console.log(id);
+        setNotes(prevNotes => {
+            return prevNotes.filter(note => note._id !== id);
+        });
+
+ 
+        try {
+
+            const params = new URLSearchParams();
+            params.append("_id", id)
+            axios.post("/deleteNote", params)
+
+        } catch (error) {
+            console.log(error);
+        }
+        
+        
         
     }
 
 
     return <div>
 
-        <Header />
+    <Header />
+    
+
      <CreateArea onAdd={addNote}/>
      {notes.map((note, index) =>
          <Note
