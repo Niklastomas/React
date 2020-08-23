@@ -52,6 +52,18 @@ function App() {
           console.log(err);
         }
       });
+
+      spotify.getPlaylist("37i9dQZEVXcNMaRPk8j7M8", (err, response) => {
+        if (!err) {
+          dispatch({
+            type: "SET_DISCOVER_WEEKLY",
+            discover_weekly: response
+          });
+          console.log(response.images[0].url);
+        } else {
+          console.log(err);
+        }
+      });
     }
       
   }, []);
