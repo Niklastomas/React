@@ -1,12 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect('mongodb://localhost:27017/noteDB', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/noteDB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+mongoose.set('useFindAndModify', false);
+
 
 
 
@@ -16,52 +22,112 @@ const noteSchema = new mongoose.Schema({
     content: String
 });
 
-const Note = mongoose.model("Note", noteSchema);
+// const Note = mongoose.model("Note", noteSchema);
+
+
+const userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    notes: [noteSchema]
+    
+});
+
+const User = new mongoose.model("User", userSchema);
+
+
+// const user = new User({
+//     username: "wa@mail.se",
+//     password: "1234",
+//     notes: { 
+//         title: "wa",
+//         content: "wawawawe"
+//     }
+       
+       
+// });
+
+// user.save();
 
 
 
-app.get("/getNotes", function(req, res){
-    Note.find(function(err, notes){
+
+app.post("/getNotes", function(req, res){
+    const username = req.body.username;
+   User.findOne({username: username}, (err, user) => {
         if(!err){
-            res.send(notes);
+            res.send(user.notes);
         } else {
             console.log(err);
         }
-    })
+   });
 });
 
 
 
 app.post("/addNote", function(req, res){
 
-    const note = new Note({
+    const username = req.body.username;
+    const note = {
         title: req.body.title,
         content: req.body.content
-    }); 
-        
-    note.save(function(err){
+    }
+    console.log(note);
+
+    User.findOneAndUpdate({username: username}, {$push: {notes: note}},  (err, doc) => {
         if(!err){
-            console.log("Succesfully inserted the document into the database!");
+            console.log("Inserted " + doc);
         } else {
             console.log(err);
         }
     });
-});
 
-app.post("/deleteNote", function(req, res){
-    
-    // Note.deleteOne({_id: req.body._id}, function(err){
+
+
+
+        
+    // note.save(function(err){
     //     if(!err){
-    //         console.log("Succesfully deleted the document!");
+    //         console.log("Succesfully inserted the document into the database!");
     //     } else {
     //         console.log(err);
     //     }
-    // })
-    Note.findByIdAndDelete(req.body._id, function(err){
-        if(!err){
-            console.log("Succesfully deleted the document!");
-        } else {
+    // });
+});
+
+// app.post("/deleteNote", function(req, res){
+    
+//     Note.findByIdAndDelete(req.body._id, function(err){
+//         if(!err){
+//             console.log("Succesfully deleted the document!");
+//         } else {
+//             console.log(err);
+//         }
+//     });
+// });
+
+app.post("/login", function(req, res){
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+    console.log(username);
+    console.log(password);
+
+    User.findOne({username: username}, (err, foundUser) => {
+        console.log(foundUser);
+        if (err) {
             console.log(err);
+        } else {
+            if (foundUser) {
+                if (foundUser.password === password) {
+                    console.log("Succesfully logged in!");
+                    res.send(true);
+                } else {
+                    res.send(false);
+                }
+            } else {
+                console.log("didnt find user");
+            }
         }
     });
 });
