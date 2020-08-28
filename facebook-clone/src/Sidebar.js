@@ -1,0 +1,29 @@
+import React from 'react';
+import './Sidebar.css';
+import SidebarRow from './SidebarRow';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import EmojiFlagsIcon from '@material-ui/icons/EmojiFlags';
+import PeopleIcon from '@material-ui/icons/People';
+import ChatIcon from '@material-ui/icons/Chat';
+import StorefrontIcon from '@material-ui/icons/Storefront';
+import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
+import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
+
+
+function Sidebar() {
+    return (
+        <div className="sidebar">
+            <SidebarRow src="data:image/jpeg;base64,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" title="Nicke"/>
+            <Sidebar Icon={LocalHospitalIcon} title="COVID-19 Inforrmation Center" />
+            <SidebarRow Icon={EmojiFlagsIcon} title="Pages" />
+            <SidebarRow Icon={PeopleIcon} title="Friends"/>
+            <SidebarRow Icon={ChatIcon} title="Messenger" />
+            <SidebarRow Icon={StorefrontIcon} title="Marketplace" />
+            <SidebarRow Icon={VideoLibraryIcon} title="Videos" />
+            <SidebarRow Icon={ExpandMoreOutlinedIcon} />
+
+        </div>
+    );
+}
+
+export default Sidebar;
