@@ -12,10 +12,10 @@ function Login() {
     auth
       .signInWithPopup(provider)
       .then((result) => {
-          dispatch({
-            type: actionTypes.SET_USER,
-            user: result.user
-          });
+        dispatch({
+          type: actionTypes.SET_USER,
+          user: result.user,
+        });
         console.log(result);
       })
       .catch((error) => alert(error.message));
