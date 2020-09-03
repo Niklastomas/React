@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap");
+.sidebar {
+  position: fixed;
+  justify-content: center center;
+  height: 100vh;
+  width: auto;
+  background: rgb(0 0 0 / 60%);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  left: 0;
+}
+
+.sidebar__option {
+  display: flex;
+  color: white;
+  font-family: "PT Sans Narrow", sans-serif;
+  margin: 1rem;
+}
+
+.sidebar__option:hover {
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: #e5e1ea;
+  text-decoration: 1px solid black;
+  color: black;
+}
+
+.sidebar__option h3 {
+  margin: 0.5rem;
+}

@@ -1,0 +1,19 @@
+.createArea {
+  position: relative;
+  width: 540px;
+  margin: 30px auto 20px auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 7px;
+  box-shadow: 0 1px 5px rgb(138, 137, 137);
+}
+
+.createArea textarea {
+  resize: none;
+}
+
+@media screen and (max-width: 800px) {
+  .createArea {
+    width: 300px;
+  }
+}

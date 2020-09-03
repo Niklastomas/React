@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+}
+
+.app {
+  height: 100vh;
+  /* background-color: #e5e1ea; */
+  background-image: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
+  background-size: cover;
+  background-position: center center;
+}
+
+.app__content {
+  margin: 30px auto 10px auto;
+  width: auto;
+  height: auto;
+  max-height: 80%;
+  max-width: 600px;
+  background: rgb(0 0 0 / 60%);
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+
+.app__content::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .app__buttons {
+    flex-direction: column;
+  }
+}

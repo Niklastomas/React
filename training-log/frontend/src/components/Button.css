@@ -1,0 +1,19 @@
+.button {
+  display: flex;
+  width: 300px;
+  height: auto;
+  margin: 20px auto 10px auto;
+  border: 1px solid white;
+  justify-content: center;
+  background: rgb(0 0 0 / 50%);
+  color: white;
+  border-radius: 10px;
+}
+
+.button:hover {
+  transform: scale(1.02);
+  background-color: #e5e1ea;
+  border: 1px solid black;
+  color: black;
+  cursor: pointer;
+}

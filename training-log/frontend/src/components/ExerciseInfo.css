@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Grandstander&display=swap");
+
+.exerciseInfo {
+  display: flex;
+  flex-direction: column;
+  background: rgb(0 0 0 / 50%);
+  height: auto;
+  width: auto;
+  margin: 1.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid white;
+  color: white;
+  font-family: "Grandstander", cursive;
+}
+
+.exerciseInfo .MuiSvgIcon-root {
+  font-size: 4rem;
+}
+
+.exerciseInfo__content--title {
+  position: relative;
+  text-align: center;
+  text-decoration: underline;
+  margin-bottom: 2rem;
+}
+
+.exerciseInfo__content--text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.exerciseInfo__content--comment {
+  position: relative;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.exerciseInfo__icons {
+  padding-top: 2rem;
+  text-align: center;
+  width: auto;
+}
+
+.editIcon {
+  margin-right: 3rem;
+}
+
+.closeIcon {
+  margin-left: 3rem;
+}
