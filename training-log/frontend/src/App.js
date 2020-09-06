@@ -9,6 +9,7 @@ import Sidebar from "./components/Sidebar";
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import Burger from "./components/Burger";
 
 function App() {
   const [exercises, setExercises] = useState([]);
@@ -17,8 +18,8 @@ function App() {
   const [showExercise, setShowExercise] = useState(false);
   const [showExerciseInfo, setShowExerciseInfo] = useState(false);
 
-  const loadExercises = () => {
-    axios
+  const loadExercises = async () => {
+    await axios
       .get("http://localhost:5000/exercises/")
       .then((res) => {
         if (res.data.length > 0) {
@@ -34,23 +35,47 @@ function App() {
     loadExercises();
   }, []);
 
-  const addExercise = (exercise) => {
-    axios
+  const addExercise = async (exercise) => {
+    await axios
       .post("http://localhost:5000/exercises/add/", exercise)
       .then(() => loadExercises())
       .catch((err) => console.log(err));
     setShowCreateArea(false);
   };
 
-  const editExercise = (updatedExercise) => {
-    axios
+  const editExercise = async (updatedExercise) => {
+    await axios
       .post(
         `http://localhost:5000/exercises/update/${updatedExercise._id}`,
         updatedExercise
       )
       .then(() => loadExercises())
       .catch((err) => console.log(err));
-    close();
+    showExercises();
+  };
+
+  const deleteExercise = async (exercise) => {
+    await axios
+      .delete(`http://localhost:5000/exercises/${exercise._id}`)
+      .then(() => loadExercises())
+      .catch((err) => console.log(err));
+    showExercises();
+  };
+
+  const showInfo = async (id) => {
+    console.log(id);
+    await axios
+      .get(`http://localhost:5000/exercises/${id}`)
+      .then((res) => {
+        setExercise(res.data);
+      })
+      .catch((err) => console.log(err));
+
+    if (exercise !== null) {
+      setShowExerciseInfo(true);
+      setShowExercise(false);
+      setShowCreateArea(false);
+    }
   };
 
   const showCreate = () => {
@@ -73,22 +98,6 @@ function App() {
     }
   };
 
-  const showInfo = (id) => {
-    console.log(id);
-    axios
-      .get(`http://localhost:5000/exercises/${id}`)
-      .then((res) => {
-        setExercise(res.data);
-      })
-      .catch((err) => console.log(err));
-
-    if (exercise !== null) {
-      setShowExerciseInfo(true);
-      setShowExercise(false);
-      setShowCreateArea(false);
-    }
-  };
-
   const close = () => {
     setShowExerciseInfo(false);
     setShowExercise(false);
@@ -98,10 +107,11 @@ function App() {
   return (
     <div className="app">
       <Header />
+      <Burger addWorkout={showCreate} showWorkouts={showExercises} />
       <Sidebar showAdd={showCreate} showExercises={showExercises} />
 
       <div className="app__content">
-        {showCreateArea && <CreateArea addExercise={addExercise} />}
+        {showCreateArea && <CreateArea addExercise={addExercise} close={close} />}
         {showExercise &&
           exercises.map((exercise) => (
             <Exercise
@@ -117,7 +127,8 @@ function App() {
           <ExerciseInfo
             exercise={exercise}
             editExercise={editExercise}
-            close={close}
+            deleteExercise={deleteExercise}
+            close={showExercises}
           />
         )}
       </div>

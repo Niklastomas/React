@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Grandstander&display=swap");
+
 .createArea {
   position: relative;
   width: 540px;
@@ -6,6 +8,35 @@
   padding: 15px;
   border-radius: 7px;
   box-shadow: 0 1px 5px rgb(138, 137, 137);
+  background: rgb(0 0 0 / 50%);
+  text-align: center;
+  font-family: "Grandstander", cursive;
+  
+}
+
+.createArea .MuiSvgIcon-root {
+  font-size: 4rem;
+  color: white;
+  
+}
+
+.addIcon {
+  margin-right: 3rem;
+}
+
+.closeIcon {
+  margin-left: 3rem;
+}
+
+.addIcon:hover {
+  color: greenyellow;
+  cursor: pointer;
+}
+
+
+.closeIcon:hover{
+  color: red;
+  cursor: pointer;
 }
 
 .createArea textarea {

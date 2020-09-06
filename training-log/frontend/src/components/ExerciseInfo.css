@@ -38,6 +38,19 @@
   margin-top: 2rem;
 }
 
+.exerciseInfo__edit {
+ 
+  text-align: center;
+}
+
+.exerciseInfo__edit input,
+.exerciseInfo__edit textarea {
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 10px;
+  resize: none;
+}
+
 .exerciseInfo__icons {
   padding-top: 2rem;
   text-align: center;
@@ -50,4 +63,24 @@
 
 .closeIcon {
   margin-left: 3rem;
+}
+
+.editIcon:hover {
+  cursor: pointer;
+  color: aqua;
+}
+
+.closeIcon:hover{
+  color: red;
+  cursor: pointer;
+}
+
+.deleteIcon:hover {
+  color: orangered;
+  cursor: pointer;
+}
+
+.doneIcon:hover{
+  color: greenyellow;
+  cursor: pointer;
 }

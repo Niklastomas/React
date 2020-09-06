@@ -15,6 +15,7 @@ app.use("/exercises", exerciseRouter);
 mongoose.connect(config.MONGO_CONNECTION, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const db = mongoose.connection;

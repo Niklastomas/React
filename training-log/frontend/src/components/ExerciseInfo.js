@@ -6,8 +6,9 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import EditIcon from "@material-ui/icons/Edit";
 import CloseIcon from "@material-ui/icons/Close";
 import DoneIcon from "@material-ui/icons/Done";
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 
-function ExerciseInfo({ exercise, close, editExercise }) {
+function ExerciseInfo({ exercise, close, editExercise, deleteExercise }) {
   const [edit, setEdit] = useState(false);
   const [newExercise, setNewExercise] = useState({});
   var newDate = new Date(exercise.date);
@@ -31,8 +32,11 @@ function ExerciseInfo({ exercise, close, editExercise }) {
 
   const handleSubmitUpdate = () => {
     editExercise(newExercise);
-    exercise = newExercise;
     setEdit(false);
+  };
+
+  const handleDelete = () => {
+      deleteExercise(exercise);
   };
 
   const handleChange = (e) => {
@@ -54,6 +58,7 @@ function ExerciseInfo({ exercise, close, editExercise }) {
     <div className="exerciseInfo">
       {edit && (
         <div className="exerciseInfo__edit">
+        <form>
           <input
             onChange={handleChange}
             type="text"
@@ -80,6 +85,7 @@ function ExerciseInfo({ exercise, close, editExercise }) {
             rows="3"
             defaultValue={exercise.comment}
           ></textarea>
+          </form>
         </div>
       )}
       {!edit && (
@@ -106,16 +112,18 @@ function ExerciseInfo({ exercise, close, editExercise }) {
       )}
       {edit ? (
         <div className="exerciseInfo__icons">
-          <DoneIcon onClick={() => handleSubmitUpdate()} />
+          <DoneIcon className="doneIcon" onClick={() => handleSubmitUpdate()} />
           <CloseIcon onClick={close} className="closeIcon" />
         </div>
       ) : (
         <div className="exerciseInfo__icons">
           <EditIcon onClick={handleEdit} className="editIcon" />
+          <DeleteOutlineOutlinedIcon className="deleteIcon" onClick={() => handleDelete()} />
           <CloseIcon onClick={close} className="closeIcon" />
         </div>
       )}
     </div>
+    
   );
 }
 

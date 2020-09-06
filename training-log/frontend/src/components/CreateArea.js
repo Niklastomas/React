@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./CreateArea.css";
-import axios from "axios";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import CloseIcon from '@material-ui/icons/Close';
 
-function CreateArea({ addExercise }) {
+function CreateArea({ addExercise, close }) {
   const [exercise, setExercise] = useState({
     name: "",
     duration: "",
@@ -42,7 +43,7 @@ function CreateArea({ addExercise }) {
             type="text"
             name="name"
             className="form-control"
-            placeholder="Exercise Name"
+            placeholder="Workout Name"
           />
         </div>
         <div className="form-group">
@@ -71,12 +72,12 @@ function CreateArea({ addExercise }) {
             className="form-control"
             name="comment"
             rows="1"
-            placeholder="How did you feel?"
+            placeholder="Comment"
           ></textarea>
         </div>
-        <button onClick={handleSubmit} className="btn btn-secondary">
-          Add Exercise
-        </button>
+        <AddCircleOutlineIcon className="addIcon" onClick={handleSubmit}/>
+        <CloseIcon className="closeIcon" onClick={close} />
+       
       </form>
     </div>
   );
