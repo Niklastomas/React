@@ -14,6 +14,7 @@ import Login from "./components/Login";
 
 function App() {
   const [login, setLogin] = useState(false);
+  const [user, setUser] = useState({});
   const [exercises, setExercises] = useState([]);
   const [exercise, setExercise] = useState({});
   const [showCreateArea, setShowCreateArea] = useState(false);
@@ -33,20 +34,27 @@ function App() {
       });
   };
 
-  useEffect(() => {
-    loadExercises();
-  }, []);
+  // useEffect(() => {
+  //   loadExercises();
+  // }, []);
 
   const handleLogin = async (input) => {
     await axios
       .post("http://localhost:5000/login", input)
       .then((res) => {
-        if (res.data === "Authenticated") {
+        if (res.data.auth === "Authenticated") {
           setLogin(true);
+          setUser(res.data.user);
           console.log(res);
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleRegister = async (input) => {
+    await axios.post("http://localhost:5000/register", input)
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
   };
 
   const addExercise = async (exercise) => {
@@ -106,6 +114,7 @@ function App() {
     if (showExercise === true) {
       setShowExercise(false);
     } else {
+      loadExercises();
       setShowExercise(true);
       setShowExerciseInfo(false);
       setShowCreateArea(false);
@@ -120,9 +129,9 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header name={login ? user.name : null}  />
       {!login ? (
-        <Login login={handleLogin} />
+        <Login handleLogin={handleLogin} handleRegister={handleRegister} />
       ) : (
         <>
           <Burger addWorkout={showCreate} showWorkouts={showExercises} />

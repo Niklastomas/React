@@ -69,7 +69,11 @@ app.post("/login", (req, res) => {
     } else {
       
       if(user.password === doc.password){
-        res.send("Authenticated");
+        const userInfo = {
+          name: doc.username,
+          id: doc._id
+        }
+        res.send({auth:"Authenticated", user:userInfo});
       } else {
         res.send("Wrong Password!");
       }
