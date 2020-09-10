@@ -39,7 +39,7 @@ function Login({ handleLogin, handleRegister }) {
     e.preventDefault();
     if(input.password === input.confirmPassword) {
         handleRegister(input);
-        showLogin(true);
+        setShowLogin(true);
     } else {
         alert("You need to enter the same password!")
     }

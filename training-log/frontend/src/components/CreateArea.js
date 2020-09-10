@@ -3,8 +3,9 @@ import "./CreateArea.css";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
 
-function CreateArea({ addExercise, close }) {
+function CreateArea({ addExercise, close, user }) {
   const [exercise, setExercise] = useState({
+    userId: user.id,
     name: "",
     duration: "",
     date: new Date(),
@@ -26,6 +27,7 @@ function CreateArea({ addExercise, close }) {
     e.preventDefault();
     addExercise(exercise);
     setExercise({
+      userId: user.id,
       name: "",
       duration: "",
       date: new Date(),

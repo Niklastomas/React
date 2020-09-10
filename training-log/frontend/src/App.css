@@ -29,4 +29,8 @@
   .app__buttons {
     flex-direction: column;
   }
+
+  .app__content {
+    border-radius: 0;
+  }
 }

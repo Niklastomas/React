@@ -23,10 +23,12 @@ function App() {
 
   const loadExercises = async () => {
     await axios
-      .get("http://localhost:5000/exercises/")
+      .get(`http://localhost:5000/exercises/user/${user.id}`)
       .then((res) => {
         if (res.data.length > 0) {
           setExercises(res.data);
+        } else {
+          setExercises([]);
         }
       })
       .catch((err) => {
@@ -45,16 +47,16 @@ function App() {
         if (res.data.auth === "Authenticated") {
           setLogin(true);
           setUser(res.data.user);
-          console.log(res);
         }
       })
       .catch((err) => console.log(err));
   };
 
   const handleRegister = async (input) => {
-    await axios.post("http://localhost:5000/register", input)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+    await axios
+      .post("http://localhost:5000/register", input)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   const addExercise = async (exercise) => {
@@ -85,7 +87,6 @@ function App() {
   };
 
   const showInfo = async (id) => {
-    console.log(id);
     await axios
       .get(`http://localhost:5000/exercises/${id}`)
       .then((res) => {
@@ -115,6 +116,7 @@ function App() {
       setShowExercise(false);
     } else {
       loadExercises();
+
       setShowExercise(true);
       setShowExerciseInfo(false);
       setShowCreateArea(false);
@@ -127,9 +129,16 @@ function App() {
     setShowCreateArea(false);
   };
 
+  const logout = () => {
+    setLogin(false);
+    setUser({});
+    setExercises([]);
+    close();
+  };
+
   return (
     <div className="app">
-      <Header name={login ? user.name : null}  />
+      <Header name={login ? user.name : null} logout={logout} />
       {!login ? (
         <Login handleLogin={handleLogin} handleRegister={handleRegister} />
       ) : (
@@ -138,7 +147,7 @@ function App() {
           <Sidebar showAdd={showCreate} showExercises={showExercises} />
           <div className="app__content">
             {showCreateArea && (
-              <CreateArea addExercise={addExercise} close={close} />
+              <CreateArea addExercise={addExercise} close={close} user={user} />
             )}
             {showExercise &&
               exercises.map((exercise) => (
