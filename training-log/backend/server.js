@@ -24,7 +24,7 @@ mongoose.connect(config.MONGO_CONNECTION, {
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-  console.log("Succesfully connected to local database!");
+  console.log("Succesfully connected to the database!");
 });
 
 const User = require("./models/userModel");
@@ -38,18 +38,20 @@ app.post("/login", (req, res) => {
       res.send("Username does not exist!");
     } else {
       bcrpyt.compare(user.password, doc.password, (err, result) => {
-        if (result) {
-          const userInfo = {
-            name: doc.username,
-            id: doc._id,
-          };
-          res.send({ auth: "Authenticated", user: userInfo });
+        if (err) {
+          console.log(err);
         } else {
-          res.send("Wrong Password!");
+          if (result) {
+            const userInfo = {
+              name: doc.username,
+              id: doc._id,
+            };
+            res.send({ auth: "Authenticated", user: userInfo });
+          } else {
+            res.send("Wrong Password!");
+          }
         }
       });
-
-     
     }
   });
 });
@@ -87,6 +89,6 @@ app.post("/register", (req, res) => {
   });
 });
 
-app.listen(config.PORT, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log("Server is running on port " + config.PORT);
 });

@@ -49,7 +49,7 @@ function Login({ handleLogin, handleRegister }) {
   return (
     <div className="login">
       <>
-        <form className="login__form" onSubmit={submitLoginInput}>
+        <form className="login__form" onSubmit={showLogin ? submitLoginInput : submitRegisterInput}>
           <input
             required
             onChange={handleChange}
@@ -74,9 +74,9 @@ function Login({ handleLogin, handleRegister }) {
             value={input.confirmPassword}
             placeholder="Confirm Password"
           /> }
-          {showLogin ?  <button onClick={submitLoginInput} type="submit" className="login__button">
+          {showLogin ?  <button type="submit" className="login__button">
             Login
-          </button> : <button onClick={submitRegisterInput} type="submit" className="login__button">
+          </button> : <button type="submit" className="login__button">
             Register
           </button> }
          
