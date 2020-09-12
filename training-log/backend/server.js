@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const config = require("./config");
 const bcrpyt = require("bcrypt");
 const exerciseRouter = require("./routes/exerciseRoute");
-var GoogleStrategy = require("passport-google-oauth20").Strategy;
+
 
 const app = express();
 
@@ -89,6 +89,8 @@ app.post("/register", (req, res) => {
   });
 });
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server is running on port " + config.PORT);
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log("Server is running on port " + port);
 });
