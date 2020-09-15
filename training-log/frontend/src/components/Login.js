@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "./Login.css";
+import Loader from "./loader.svg";
 
-function Login({ handleLogin, handleRegister }) {
+function Login({ handleLogin, handleRegister, loading }) {
   const [input, setInput] = useState({
     username: "",
     password: "",
     confirmPassword: "",
   });
   const [showLogin, setShowLogin] = useState(true);
+  // const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +30,7 @@ function Login({ handleLogin, handleRegister }) {
       username: "",
       password: "",
     });
+    
   };
 
   const toggleLogin = (e) => {
@@ -47,7 +50,9 @@ function Login({ handleLogin, handleRegister }) {
   };
 
   return (
-    <div className="login">
+    <>
+    {loading ? <img className="loader" src={Loader} alt="Loading"></img> : (
+      <div className="login">
       <>
         <form className="login__form" onSubmit={showLogin ? submitLoginInput : submitRegisterInput}>
           <input
@@ -101,67 +106,10 @@ function Login({ handleLogin, handleRegister }) {
           </p>
         </div>
       </>
-      {/* {showLogin ? (
-        <>
-          <form className="login__form" onSubmit={submitLoginInput}>
-            <input
-              required
-              onChange={handleChange}
-              type="text"
-              name="username"
-              value={input.username}
-              placeholder="Username"
-            />
-            <input
-              required
-              onChange={handleChange}
-              type="password"
-              name="password"
-              value={input.password}
-              placeholder="Password"
-            />
-            <button type="submit" className="login__button">
-              Login
-            </button>
-          </form>
-          <div className="login__text">
-            <p>
-              Dont have an account? <a onClick={register} href="">Register</a>
-            </p>
-          </div>
-        </>
-      ) : (
-        <form className="login__form" onSubmit={submitRegisterInput}>
-          <input
-            required
-            onChange={handleChange}
-            type="text"
-            name="username"
-            value={input.username}
-            placeholder="Username"
-          />
-          <input
-            required
-            onChange={handleChange}
-            type="password"
-            name="password"
-            value={input.password}
-            placeholder="Enter Password"
-          />
-            <input
-            required
-            onChange={handleChange}
-            type="password"
-            name="password"
-            value={input.confirmPassword}
-            placeholder="Confirm Password"
-          />
-          <button type="submit" className="login__button">
-            Register
-          </button>
-        </form>
-      )} */}
     </div>
+    )}
+    
+    </>
   );
 }
 

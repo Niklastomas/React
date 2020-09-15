@@ -8,13 +8,14 @@ import ExerciseInfo from "./components/ExerciseInfo";
 import Sidebar from "./components/Sidebar";
 import { useEffect } from "react";
 import { useState } from "react";
-import axios from "axios";
+import axios from "./axios";
 import Burger from "./components/Burger";
 import Login from "./components/Login";
 
 function App() {
   const [login, setLogin] = useState(false);
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
   const [exercises, setExercises] = useState([]);
   const [exercise, setExercise] = useState({});
   const [showCreateArea, setShowCreateArea] = useState(false);
@@ -23,7 +24,7 @@ function App() {
 
   const loadExercises = async () => {
     await axios
-      .get(`http://localhost:5000/exercises/user/${user.id}`)
+      .get(`/exercises/user/${user.id}`)
       .then((res) => {
         if (res.data.length > 0) {
           setExercises(res.data);
@@ -41,8 +42,9 @@ function App() {
   // }, []);
 
   const handleLogin = async (input) => {
+    setLoading(true);
     await axios
-      .post("http://localhost:5000/login", input)
+      .post("/login", input)
       .then((res) => {
         if (res.data.auth === "Authenticated") {
           setLogin(true);
@@ -50,18 +52,19 @@ function App() {
         }
       })
       .catch((err) => console.log(err));
+      setLoading(false);
   };
 
   const handleRegister = async (input) => {
     await axios
-      .post("http://localhost:5000/register", input)
+      .post("/register", input)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
 
   const addExercise = async (exercise) => {
     await axios
-      .post("http://localhost:5000/exercises/add/", exercise)
+      .post("/exercises/add/", exercise)
       .then(() => loadExercises())
       .catch((err) => console.log(err));
     setShowCreateArea(false);
@@ -70,7 +73,7 @@ function App() {
   const editExercise = async (updatedExercise) => {
     await axios
       .post(
-        `http://localhost:5000/exercises/update/${updatedExercise._id}`,
+        `/exercises/update/${updatedExercise._id}`,
         updatedExercise
       )
       .then(() => loadExercises())
@@ -80,7 +83,7 @@ function App() {
 
   const deleteExercise = async (exercise) => {
     await axios
-      .delete(`http://localhost:5000/exercises/${exercise._id}`)
+      .delete(`/exercises/${exercise._id}`)
       .then(() => loadExercises())
       .catch((err) => console.log(err));
     showExercises();
@@ -88,7 +91,7 @@ function App() {
 
   const showInfo = async (id) => {
     await axios
-      .get(`http://localhost:5000/exercises/${id}`)
+      .get(`/exercises/${id}`)
       .then((res) => {
         setExercise(res.data);
       })
@@ -140,7 +143,7 @@ function App() {
     <div className="app">
       <Header name={login ? user.name : null} logout={logout} />
       {!login ? (
-        <Login handleLogin={handleLogin} handleRegister={handleRegister} />
+        <Login handleLogin={handleLogin} handleRegister={handleRegister} loading={loading} />
       ) : (
         <>
           <Burger addWorkout={showCreate} showWorkouts={showExercises} />
