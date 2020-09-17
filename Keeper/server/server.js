@@ -1,11 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded());
+app.use(express.json());
+app.use(cors());
+
+const noteRoute = require("./noteRoute");
+const loginRoute = require("./loginRoute");
+app.use("/notes", noteRoute);
+app.use("/login", loginRoute);
 
 mongoose.connect("mongodb://localhost:27017/noteDB", {
   useNewUrlParser: true,
@@ -13,20 +21,40 @@ mongoose.connect("mongodb://localhost:27017/noteDB", {
 });
 mongoose.set("useFindAndModify", false);
 
-const noteSchema = new mongoose.Schema({
-  id: String,
-  title: String,
-  content: String,
+app.post("/add/:id", (req, res) => {
+  const body = req.body;
+  const id = req.params.id;
+  console.log(body);
+  console.log(id);
+
+  // User.findOneAndUpdate({googleId: id}, {notes: note}, (err, doc) =>{
+  //     if(err){
+  //         console.log(err);
+  //     } else {
+  //         console.log("Succesfully updated: " + doc);
+  //     }
+  // });
 });
 
+// const noteSchema = new mongoose.Schema({
+//   id: String,
+//   title: String,
+//   content: String,
+// });
 
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  notes: [noteSchema],
+
+// const userSchema = new mongoose.Schema({
+//   username: String,
+//   password: String,
+//   notes: [noteSchema],
+// });
+
+// const User = new mongoose.model("User", userSchema);
+
+app.post("/hej/:id", (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
 });
-
-const User = new mongoose.model("User", userSchema);
 
 app.post("/getNotes", function (req, res) {
   const username = req.body.username;
@@ -83,28 +111,28 @@ app.post("/deleteNote", function (req, res) {
   );
 });
 
-app.post("/login", function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
+// app.post("/login", function (req, res) {
+//   const username = req.body.username;
+//   const password = req.body.password;
 
-  User.findOne({ username: username }, (err, foundUser) => {
-    console.log(foundUser);
-    if (err) {
-      console.log(err);
-    } else {
-      if (foundUser) {
-        if (foundUser.password === password) {
-          console.log("Succesfully logged in!");
-          res.send(true);
-        } else {
-          res.send(false);
-        }
-      } else {
-        console.log("didnt find user");
-      }
-    }
-  });
-});
+//   User.findOne({ username: username }, (err, foundUser) => {
+//     console.log(foundUser);
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       if (foundUser) {
+//         if (foundUser.password === password) {
+//           console.log("Succesfully logged in!");
+//           res.send(true);
+//         } else {
+//           res.send(false);
+//         }
+//       } else {
+//         console.log("didnt find user");
+//       }
+//     }
+//   });
+// });
 
 app.listen(5000, function () {
   console.log("Server running on port 5000");
