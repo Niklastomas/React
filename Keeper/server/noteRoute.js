@@ -4,7 +4,7 @@ const User = require("./userModel");
 
 
 
-router.post("/add/:id", (req, res) => {
+router.post("/update/:id", (req, res) => {
     console.log(req.body);
     console.log(req.params.id);
 
@@ -13,6 +13,7 @@ router.post("/add/:id", (req, res) => {
             console.log(err);
         } else {
             console.log("Succesfully updated: " + doc);
+            res.send(doc.notes);
         }
     });
 });

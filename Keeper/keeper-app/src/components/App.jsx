@@ -5,117 +5,59 @@ import Note from "./Note";
 import CreateArea from "./CreateArea";
 import axios from "../axios";
 import Login from "./Login";
-import GoogleLogin from "react-google-login";
-
-
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [user, setUser] = useState({});
   const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const loadNotes = () => {
-    // if (user.username !== "") {
-    //   const params = new URLSearchParams();
-    //   params.append("username", user.username);
-
-    //   axios
-    //     .post("/getNotes", params)
-    //     .then((res) => {
-    //       setNotes(res.data);
-    //       console.log(res.data);
-    //     })
-    //     .catch(function (error) {
-    //       // handle error
-    //       console.log(error);
-    //     });
-    // }
-
-      axios.get(`/notes/${user.googleId}`)
+    axios
+      .get(`/notes/${user.googleId}`)
       .then((res) => setNotes(res.data))
-      .catch(err => console.log(err));
-      console.log(user);
-
-
+      .catch((err) => console.log(err));
+    console.log(user);
   };
 
   useEffect(() => {
     loadNotes();
-  }, [user]); 
+  }, [user]);
 
-  function addNote(newNote) {
+  async function addNote(newNote) {
+    setNotes((prevNotes) => {
+      return [...prevNotes, newNote];
+    });
 
-    console.log(newNote);
-    // try {
-    //   const params = new URLSearchParams();
-    //   params.append("username", user.username);
-    //   params.append("title", newNote.title);
-    //   params.append("content", newNote.content);
-    //   axios.post("/addNote", params);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // setNotes((prevNotes) => {
-    //     return [...prevNotes, newNote];
-    //   }); 
-
+    try {
       const newNotes = notes;
       newNotes.push(newNote);
-    
-
-      axios.post(`/notes/add/${user.googleId}`, newNotes)
-      .then(loadNotes())
-      .catch(err => console.log(err));
-      // console.log(user);
-
-      
-      
-  }
-
-  function deleteNote(noteId) {
-    try {
-      const params = new URLSearchParams();
-      params.append("id", noteId);
-      params.append("username", user.username);
-      axios.post("/deleteNote", params);
+      await axios.post(`/notes/update/${user.googleId}`, newNotes);
     } catch (error) {
       console.log(error);
     }
-    setNotes((prevNotes) =>{
-        return [...prevNotes.filter((note) => note._id !== noteId)];
-    });
-    
   }
 
-  // function handleLogin(loginInfo) {
-  //   const username = loginInfo.username;
-  //   const password = loginInfo.password;
+  async function deleteNote(noteId) {
+    setNotes((prevNotes) => {
+      return [...prevNotes.filter((note) => note._id !== noteId)];
+    });
 
-  //   setUser({
-  //     username: username,
-  //     password: password,
-  //   });
-
-  //   const params = new URLSearchParams();
-  //   params.append("username", user.username);
-  //   params.append("password", user.password);
-  //   axios.post("/login", params).then((res) => {
-  //     setLogin(res.data);
-  //   });
-  //   loadNotes();
-  // }
+    try {
+      const newNotes = notes.filter((note) => note._id !== noteId);
+      await axios.post(`/notes/update/${user.googleId}`, newNotes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const loginSuccess = (response) => {
-
-    axios.post(`/login/${response.googleId}`)
-    .then(setUser(response.profileObj))
-    .then(setToken(response.tokenId))
-    .catch(err => console.log(err));
+    axios
+      .post(`/login/${response.googleId}`)
+      .then(setUser(response.profileObj))
+      .then(setToken(response.tokenId))
+      .catch((err) => console.log(err));
 
     console.log(response);
-
-
   };
 
   const loginFailure = (response) => {
@@ -131,40 +73,26 @@ function App() {
 
   return (
     <div>
-      <Header name={user.givenName} handleLogout={logout}/>
-      
+      <Header name={user.givenName} handleLogout={logout} />
 
       {token ? (
         <>
           <CreateArea onAdd={addNote} />
-          {!loading &&
-            notes.map((note, index) => (
-              <Note
-                key={index}
-                id={note._id}
-                title={note.title}
-                content={note.content}
-                onDelete={deleteNote}
-              />
-            ))}
+
+          {notes.map((note, index) => (
+            <Note
+              key={index}
+              id={note._id}
+              title={note.title}
+              content={note.content}
+              onDelete={deleteNote}
+            />
+          ))}
         </>
       ) : (
         <Login loginSuccess={loginSuccess} loginFailure={loginFailure} />
       )}
-      {/* <CreateArea onAdd={addNote}/>
-     {!loading && notes.map((note, index) =>
-         <Note
-          key={index}
-          id={note.id}
-          title={note.title}
-          content={note.content}
-          onDelete={deleteNote}
 
-
-          />
-     )} */}
-
-      <Footer />
       <Footer />
     </div>
   );
