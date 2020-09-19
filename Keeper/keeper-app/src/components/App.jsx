@@ -11,17 +11,17 @@ function App() {
   const [user, setUser] = useState({});
   const [token, setToken] = useState("");
 
-  const loadNotes = () => {
-    axios
+  const loadNotes = async () => {
+    await axios
       .get(`/notes/${user.googleId}`)
       .then((res) => setNotes(res.data))
       .catch((err) => console.log(err));
-    console.log(user);
+    
   };
 
   useEffect(() => {
     loadNotes();
-  }, [user]);
+  }, [token]);
 
   async function addNote(newNote) {
     setNotes((prevNotes) => {
@@ -56,12 +56,10 @@ function App() {
       .then(setUser(response.profileObj))
       .then(setToken(response.tokenId))
       .catch((err) => console.log(err));
-
-    console.log(response);
+   
   };
 
   const loginFailure = (response) => {
-    console.log(response);
     setToken("");
     alert("Failed to login!");
   };
